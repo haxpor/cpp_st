@@ -30,6 +30,7 @@ int main()
 
     // compiler deduce to use non-const version function
     auto& a = w.getN();
+    std::cout << "typeid(a) is " << typeid(a).name() << std::endl;
     a = 11;
 
     // compiler deduces whether it use const or non-const version function
@@ -38,12 +39,13 @@ int main()
     // compiler duces to use non-const version function
     // but just that value cannot be modified
     const auto& b = w.getN();
+    std::cout << "typeid(b) is " << typeid(b).name() << std::endl;
     //b++;      // error, cannot do this
 
-    std::cout << b << "(" << std::addressof(b) << ")" << std::endl;
+    std::cout << "b: " <<  b << "(" << std::addressof(b) << ")" << std::endl;
 
-    std::cout << a << "(" << std::addressof(a) << ")" << std::endl;
-    std::cout << w.getN() << "(" << std::addressof(w.getN()) << ")" << std::endl;
+    std::cout << "a: " << a << "(" << std::addressof(a) << ")" << std::endl;
+    std::cout << "w.getN(): " << w.getN() << "(" << std::addressof(w.getN()) << ")" << std::endl;
 
     return 0;
 }
