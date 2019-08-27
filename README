@@ -5,6 +5,6 @@ Most of the source files can be compiled via
 then you can execute via `./a.out`.
 
 Most of program is a simple single source file program, thus you can judge by its file name for what
-to expect. Otherwise for more complex program, it should be inside a directory.
+to expect. Otherwise for more complex program, it should be inside a directory. Read comment inside main source file of each program for more information on how to compile (in case it's complicated, or what is it demonstrated).
 
 This is by design not to have any build system.
