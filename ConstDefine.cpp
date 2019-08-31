@@ -3,6 +3,8 @@
  *
  * Anyway, I feel defining in this way is somewhat confusing, especially when combined with
  * definition of pointer variable type.
+ *
+ * note: Noticed this kind of style in GLM's template struct of mat. See its function's argument.
  */
 
 #include <iostream>
