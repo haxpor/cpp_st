@@ -1,3 +1,8 @@
+/*
+ * Demonstrate memory address growing in either direction for stack and heap.
+ * After this should look into Castings.cpp.
+ */
+
 #include <iostream>
 
 class A
