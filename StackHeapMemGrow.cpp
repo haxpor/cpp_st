@@ -1,6 +1,14 @@
 /*
  * Demonstrate memory address growing in either direction for stack and heap.
  * After this should look into Castings.cpp.
+ *
+ * When compiled, you will probably encounter the following compile error
+ *
+ * StackHeapMemGrow.cpp:18:7: warning: direct base ‘A’ inaccessible in ‘Derived’ due to ambiguity
+ class Derived : public A, public B
+ * 
+ * This is due to multiple inheritance which should be avoided, but used in this case for studying
+ * purpose.
  */
 
 #include <iostream>
