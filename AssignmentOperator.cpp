@@ -1,5 +1,7 @@
 /**
  * Demonstrate implementation of overloading assignment operator function.
+ *
+ * Compile with -fno-elide-constructors.
  */
 
 #include <iostream>
