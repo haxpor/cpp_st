@@ -5,6 +5,10 @@
  * Do it in 2 ways
  *  1. By hands using `new` and `new()` (placement-new)
  *  2. using std::allocator
+ *
+ * More info can read from
+ *  - https://en.cppreference.com/w/cpp/memory/allocator
+ *  - https://stackoverflow.com/a/222578/571227
  */
 
 #include <iostream>
