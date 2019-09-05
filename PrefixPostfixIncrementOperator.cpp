@@ -23,6 +23,20 @@ public:
         ++a;
         return tmp;
     }
+
+    // bonus: += operator
+    Widget& operator+=(const Widget& rhs)
+    {
+        a += rhs.a;
+        return *this;
+    }
+
+    // bonus: -= operator
+    Widget& operator-=(const Widget& rhs)
+    {
+        a -= rhs.a;
+        return *this;
+    }
 };
 
 int main()
@@ -36,6 +50,12 @@ int main()
     
     t = ++w2;
     std::cout << t.a << " " << w2.a << std::endl;
+
+    w1 -= w2;
+    std::cout << w1.a << std::endl;
+
+    w1 += w2;
+    std::cout << w1.a << std::endl;
 
     return 0;
 }
