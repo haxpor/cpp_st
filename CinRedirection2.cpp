@@ -11,14 +11,20 @@
  *
  * Use res/sample_input2.txt as input for piping into this program.
  * Execution usage:
- *  ./a.out < res/sample_input2.txt
+ *  ./a.out < res/sample_input2.txt // for parameters sent in as oneline
+ *  ./a.out < res/sample_input3.txt // for parameters sent in each separated by newline
  */
+
 #include <cstdio>
 #include <iostream>
 #include <iomanip>
 
 int main(void)
 {
+    // the two buffers manage its own streaming buffer, thus we can do it twice one for each
+    // as it won't interfere one another buffer without a need to reset states/modifiers, and read-position
+    // of each buffer.
+
     {
         int input1;
         char input2;
