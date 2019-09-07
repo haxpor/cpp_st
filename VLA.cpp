@@ -21,8 +21,8 @@
  * Further read https://www.reidatcheson.com/c/programming/2015/12/07/vlas.html
  *
  * Finally if you ensure that the input is small to medium value which could not be put into danger
- * the maximum stack size, then use it. Or otherwise, put comment into the code. And do note, even
- * const cast won't silence the warning as the expression is not constant.
+ * the maximum stack size, then use it. Or otherwise, put comment into the code, or declare array on
+ * heap. And do note, even const cast won't silence the warning as the expression is not constant.
  */
 #include <iostream>
 #include <cstddef>
@@ -43,5 +43,11 @@ int main()
     // effectively use VLA, dangerous
     std::int32_t arr[N];
     std::cout << arr[N-1] << std::endl;
+
+    // declare array on heap will solve the problem
+    // note: we won't see compiler warning for this
+    std::int32_t* arr2 = new std::int32_t[N];
+    std::cout << arr2[N-1] << std::endl;
+    delete[] arr2;
     return 0;
 }
