@@ -19,6 +19,10 @@
  * segfault. Those 3142 bytes.
  *
  * Further read https://www.reidatcheson.com/c/programming/2015/12/07/vlas.html
+ *
+ * Finally if you ensure that the input is small to medium value which could not be put into danger
+ * the maximum stack size, then use it. Or otherwise, put comment into the code, do casting into
+ * const before supplying such value into declaration of array variable to silence compiler's warning.
  */
 #include <iostream>
 #include <cstddef>
