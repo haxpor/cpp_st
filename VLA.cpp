@@ -21,8 +21,8 @@
  * Further read https://www.reidatcheson.com/c/programming/2015/12/07/vlas.html
  *
  * Finally if you ensure that the input is small to medium value which could not be put into danger
- * the maximum stack size, then use it. Or otherwise, put comment into the code, do casting into
- * const before supplying such value into declaration of array variable to silence compiler's warning.
+ * the maximum stack size, then use it. Or otherwise, put comment into the code. And do note, even
+ * const cast won't silence the warning as the expression is not constant.
  */
 #include <iostream>
 #include <cstddef>
@@ -38,8 +38,10 @@ int main()
 
     std::cout << "n = " << n << std::endl;
 
+    // even do const-cast won't silence the warning
+    const std::int32_t N = static_cast<const std::int32_t>(n);
     // effectively use VLA, dangerous
-    std::int32_t arr[n];
-    std::cout << arr[n-1] << std::endl;
+    std::int32_t arr[N];
+    std::cout << arr[N-1] << std::endl;
     return 0;
 }
