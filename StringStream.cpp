@@ -10,6 +10,29 @@
 #include <sstream>
 #include <iomanip>
 
+static void CheckType(const std::string& token)
+{
+    for (const char& c: token)
+    {
+        if (std::isalpha(c))
+        {
+            std::cout << "\t" << c << " is alphabetic";
+            if (std::isupper(c))
+            {
+                std::cout << " (Uppper case)" << std::endl;
+            }
+            else
+            {
+                std::cout << " (lower case)" << std::endl;
+            }
+        }
+        else if (std::isdigit(c))
+            std::cout << "\t" << c << " is digit" << std::endl;
+        else if (std::ispunct(c))
+            std::cout << "\t" << c << " is punctuation" << std::endl;
+    }
+}
+
 int main()
 {
     // limit the scope of variable in use
@@ -24,6 +47,7 @@ int main()
         while (ss >> tmpToken)
         {
             std::cout << ": " << tmpToken << std::endl;
+            CheckType(tmpToken);
         }
         std::cout << std::endl;
     }
