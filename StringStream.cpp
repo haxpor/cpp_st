@@ -8,7 +8,6 @@
 
 #include <iostream>
 #include <sstream>
-#include <iomanip>
 
 static void CheckType(const std::string& token)
 {
