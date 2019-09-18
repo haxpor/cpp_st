@@ -51,7 +51,7 @@ int main()
 
         // you won't see any dtor up to this point.
 
-        // prove that for pointer type, you need to handle manually
+        // so far it's a proof that for pointer type, you need to handle manually
     }
 
     cout << endl;
