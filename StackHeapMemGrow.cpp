@@ -34,12 +34,16 @@ int main()
     A a;
     B b;
     Derived d;
+    int ai;
+    double bi;
 
     // note: low address is below, and high address is above
     // stack grows down (anyway it's not always guarantee to always be decreasing when printed)
     std::printf("%7s: %15p\n", "A", std::addressof(a));
     std::printf("%7s: %15p\n", "B", std::addressof(b));
     std::printf("%7s: %15p\n", "Derived", std::addressof(d));
+    std::printf("%7s: %15p\n", "ai", std::addressof(ai));
+    std::printf("%7s: %15p\n", "bi", std::addressof(bi));
 
     std::printf("\n");
     
@@ -48,7 +52,7 @@ int main()
     B* bPtr = new B();
     Derived* dPtr = new Derived();
 
-    // heap grows up (anyway it's not always guarantee to always be decreasing when printed)
+    // heap grows up (anyway it's not always guarantee to always be increasing when printed)
     // thus you should see incresing address location from printed-out text on console on these lines
     std::printf("%7s: %15p\n", "A", std::addressof(aPtr));
     std::printf("%7s: %15p\n", "B", std::addressof(bPtr));
