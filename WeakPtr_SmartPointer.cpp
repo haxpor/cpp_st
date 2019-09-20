@@ -86,6 +86,7 @@ static void SameSharedPtr(const std::weak_ptr<T>& w, const std::shared_ptr<T>& s
 {
     if (!w.expired())
     {
+        // lock() to get a newly created std::shared_ptr
         auto sharedPtr = w.lock();
 
         // compare if shared_ptr from weak_ptr is the same as s
