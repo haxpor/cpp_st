@@ -18,7 +18,7 @@ using namespace std;
 
 int main()
 {
-    vector<int> v {3, 1, 4, 1, 5, 9};
+    vector<int> v {3, 2, 4, 1, 5, 9};
     PRINTALL(v)
     make_heap(v.begin(), v.end());
     PRINTALL(v)
@@ -44,6 +44,18 @@ int main()
     cout << "after std::pop_heap\n";
     pop_heap(v.begin(), v.end());
     PRINTALL(v)
+
+    // iteratively sort the heap in ascending order
+    // provided that we don't pop_back() when we do pop_heap()
+    // note: finally we will see a sorted heap when it processes through all of element
+    int iend=0;
+    const int iendEnd = distance(v.begin(), v.end()-1);
+    while (iend<iendEnd)
+    {
+        pop_heap(v.begin(), v.end()-iend);
+        PRINTALL(v)
+        ++iend;
+    }
 
     return 0;
 }
