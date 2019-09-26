@@ -37,8 +37,8 @@ int main()
 
     // use std::partition_point to find such iterator that separates between true & false predicate
     middle = std::partition_point(v.begin(), v.end(), pred);
-    std::cout << "parition point (iterator): " << *middle << std::endl;
-    std::cout << "parition point (index): " << std::distance(v.begin(), middle) << std::endl;
+    std::cout << "partition point (iterator): " << *middle << std::endl;
+    std::cout << "partition point (index): " << std::distance(v.begin(), middle) << std::endl;
 
     return 0;
 }
