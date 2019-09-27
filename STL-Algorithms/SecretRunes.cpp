@@ -2,8 +2,8 @@
  * Demonstrate usage of STL Algorithms - Secret Runes
  * Includes
  *  - stable_*
- *      - std::stable_sort
- *      - std::stable_partition
+ *      - std::stable_sort                          C++17
+ *      - std::stable_partition                     C++17
  *  - is_*
  *      - std::is_sorted
  *      - std::is_partitioned
