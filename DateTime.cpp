@@ -13,6 +13,9 @@
  *
  * Support
  *  - std::chrono::high_resolution_clock::now()
+ *
+ * Compile with
+ *  g++ -std=c++11 DateTime.cpp -lpthread
  */
 
 #include <iostream>
