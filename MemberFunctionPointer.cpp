@@ -25,13 +25,25 @@
  */
 #include <iostream>
 #include <functional>       // included this just to have std::function and its _Nocopy_types available although we didn't use it
+#include <cstring>
 
 using namespace std;
+
+struct TestBare
+{
+    // nothing here
+};
 
 struct TestSt
 {
     char a[2];
     void bar() {};
+    virtual void foo() {};
+};
+
+struct TestStDerived: public TestSt
+{
+    virtual void foo() override { };
 };
 
 union TestUn
@@ -43,14 +55,51 @@ union TestUn
     // this is a pointer to the member function of struct
     void (TestSt::*bar)();
 
+    void (TestSt::*foo)();
+
     // member function doesn't has any effect of the sizeof(..struct/class..)
-    void foo() {};
+    void foo_func() {};
 };
 
+static void inspectVirtualMemberFunction_TestSt(const TestSt* obj, void (TestSt::*any_mem_func)())
+{
+    void *data[2];
+    std::memcpy(data, &any_mem_func, sizeof(any_mem_func));
+    std::cout << "  vtable base pointer of TestSt: " << std::addressof(((long*)obj)[0]) << '\n';
+    std::cout << "  Function pointer (diff): " << data[0] << '\n';
+    std::cout << "  Pointer adj: " << data[1] << '\n';
+}
+
+static void inspectVirtualMemberFunction_TestStDerived(const TestStDerived* obj, void (TestStDerived::*any_mem_func)())
+{
+    void *data[2];
+    std::memcpy(data, &any_mem_func, sizeof(any_mem_func));
+    std::cout << "  vtable base pointer of TestStDerived: " << std::addressof(((long*)obj)[0]) << '\n';
+    std::cout << "  Function pointer (diff): " << data[0] << '\n';
+    std::cout << "  Pointer adj: " << data[1] << '\n';
+}
+
 int main() {
+    TestUn u;
+    TestSt s;
+    TestStDerived s_derived;
+
     std::cout << "sizeof(const void*): " << sizeof(const void*) << '\n';
     std::cout << "sizeof(TestUn): " << sizeof(TestUn) << ", __alignof__: " << __alignof__(TestUn) << '\n';
     std::cout << "sizeof(TestUn::bar): " << sizeof(TestUn::bar) << '\n';
+    std::cout << "sizeof(TestUn::foo): " << sizeof(TestUn::foo) << '\n';
+    std::cout << "TestSt::bar\n";
+    inspectVirtualMemberFunction_TestSt(&s, &TestSt::bar);
+    std::cout << "TestSt::foo (virtual function)\n";
+    inspectVirtualMemberFunction_TestSt(&s, &TestSt::foo);
+    std::cout << "  sizeof(TestSt): " << sizeof(TestSt) << '\n';
+
+    std::cout << "TestStDerived::foo (virtual function)\n";
+    inspectMVirtualMemberFunction_TestStDerived(&s_derived, &TestStDerived::foo);
+    std::cout << "  sizeof(TestStDerived): " << sizeof(TestStDerived) << '\n';
+
+    std::cout << "sizeof(TestBare): " << sizeof(TestBare) << '\n';      // class with no member data and virtual member function will have at least 1 byte
+                                                                        // as it cannot has 0 byte in size
 
     std::cout << '\n';
     std::cout << "-- Checking size of _Nocopy_types --\n";
