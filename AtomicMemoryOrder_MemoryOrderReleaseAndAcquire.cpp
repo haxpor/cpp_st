@@ -1,5 +1,7 @@
 /**
- * Test atomic with relaxed memory order.
+ * Test seeing the effect of setting memory order to release and acquire in different thread.
+ * This has the same effect as sequential consistent when we didn't set anything; by default.
+ * But it has minimal overhead (see https://stackoverflow.com/a/6319356/571227).
  *
  * Compile with the following flags
  *  -std=c++11 and -lpthread
@@ -9,6 +11,7 @@
 #include <atomic>
 #include <chrono>
 #include <random>
+#include <cassert>
 
 #define SIZE 50
 
@@ -17,20 +20,20 @@ std::atomic<int> y[SIZE];
 
 static void thread_work1(int i)
 {
-    x[i].store(1, std::memory_order_relaxed);
-    y[i].store(2, std::memory_order_relaxed);
+    x[i].store(1, std::memory_order_release);
+    y[i].store(2, std::memory_order_release);
 }
 
 static void thread_work2(int i)
 {
-    int loaded_y = y[i].load(std::memory_order_relaxed);
-    int loaded_x = x[i].load(std::memory_order_relaxed);
+    int loaded_y = y[i].load(std::memory_order_acquire);
+    int loaded_x = x[i].load(std::memory_order_acquire);
+
+    // this case won't happen as CPU ensures sequential consistency
+    assert(!(loaded_y == 2 && loaded_x == 0));
 
     std::cout << loaded_y << " "
-              << loaded_x;
-    if (loaded_y == 2 && loaded_x == 0)
-        std::cout << " [out-of-order]";
-    std::cout << std::endl;
+              << loaded_x << std::endl;
 }
 
 int main()
