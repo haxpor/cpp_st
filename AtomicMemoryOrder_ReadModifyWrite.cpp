@@ -75,6 +75,11 @@ int main()
     t1.join();
     t2.join();
 
+    // notice we use std::endl here only one place, but '\n' for all the less.
+    // This is due to we have only one console, thus flushing it might mess with output as
+    // multiple threads also try to print something out possibly at the same time.
+    //
+    // Thus for consistency output, we flush via std::endl at this place only.
     std::cout << "[Main thread] data: " << data.load(std::memory_order_acquire) << std::endl;
 
     return 0;
