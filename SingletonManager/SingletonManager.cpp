@@ -1,6 +1,9 @@
 /**
  * Demonstrate how to implement modern singleton class
  * in template class.
+ *
+ * Defining Manager class just to be consumed (wrap) by Singleton. So set this policy. Anyway
+ * nothing will stop dev to directly use such manager, but keep in mind which which is which.
  */
 
 #include "Singleton.h"
