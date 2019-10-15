@@ -15,7 +15,7 @@ public:
             delete managedObject;
             managedObject = nullptr;
         }
-        std::cout << "dtor Singleton" << std::endl;
+        std::cout << "dtor Singleton [" << typeid(T).name() << "]" << std::endl;    // this requires rtti, optional, just for debugging purpose
     }
     Singleton(const Singleton&) = delete;
     Singleton(Singleton&&) = delete;
@@ -36,7 +36,7 @@ public:
 private:
     Singleton(): managedObject(nullptr) 
     {
-        std::cout << "ctor Singleton" << std::endl;
+        std::cout << "ctor Singleton [" << typeid(T).name() << "]" << std::endl;    // this requires rtti, optional, just for debugging purpose
         managedObject = new T();
     }
 

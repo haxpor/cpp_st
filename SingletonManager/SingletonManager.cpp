@@ -13,19 +13,19 @@
 class MyManager
 {
 public:
-    MyManager()
-    {
-        std::cout << "ctor MyManager" << std::endl;
-    }
-    ~MyManager()
-    {
-        std::cout << "dtor MyManager" << std::endl;
-    }
+    MyManager() { std::cout << "ctor MyManager" << std::endl; }
+    ~MyManager() { std::cout << "dtor MyManager" << std::endl; }
 
-    void PrintNum(int n) const
-    {
-        std::cout << "Something: " << n << std::endl;
-    }
+    void PrintNum(int n) const { std::cout << "Something: " << n << std::endl; }
+};
+
+class MyManager2
+{
+public:
+    MyManager2() { std::cout << "ctor MyManager2" << std::endl; }
+    ~MyManager2() { std::cout << "dtor MyManager2" << std::endl; }
+
+    void PrintSomething() const { std::cout << "something" << std::endl; }
 };
 
 // call AutoDestroy() then assign it to variable to live in the
@@ -34,6 +34,8 @@ public:
 //
 // no need to interact with this variable any further, we can just
 // leave it here.
+//
+// in this case, the scope is the program's lifecycle
 auto mmsingleton = Singleton<MyManager>::AutoDestroy();
 
 int main()
@@ -52,6 +54,11 @@ int main()
     Singleton<MyManager>::GetInstance().PrintNum(1);
     m1.PrintNum(2);
     m2.PrintNum(3);
+
+    {
+        auto dummy = Singleton<MyManager2>::AutoDestroy();
+        Singleton<MyManager2>::GetInstance().PrintSomething();
+    }
 
     return 0;
 }
