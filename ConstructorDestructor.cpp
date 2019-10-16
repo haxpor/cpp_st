@@ -7,12 +7,12 @@
  *      Member 1
  *      Member 2
  *      Member 3
- *  - Constructor
+ *  - Constructor (in creation)
  *      Member 1
  *      Member 2
  *      Member 3
  *      MyClass
- *  - Destructor
+ *  - Destructor (in destruction)
  *      MyClass
  *      Member 1
  *      Member 2
