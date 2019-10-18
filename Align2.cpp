@@ -30,6 +30,7 @@ struct Widget
 //  - as this allocator supports multiple different type on the whim, and no support to keep track
 //    of which type at which indexed-location in its backend data. Users have to call destructor
 //    method manually via ->~T(). This can be solved by providing just one type for allocator.
+//    See AlignedStorage.cpp for solution on this.
 template <std::size_t N>
 struct MyAllocator
 {
