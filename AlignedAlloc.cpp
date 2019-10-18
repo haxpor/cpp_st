@@ -2,6 +2,9 @@
  * Demonstrate usage of std::aligned_alloc.
  *
  * std::aligned_alloc is available since C++17.
+ *
+ * Compile with
+ *  g++ -std=c++17 AlignedAlloc.cpp
  */
 #include <iostream>
 #include <cstdlib>
