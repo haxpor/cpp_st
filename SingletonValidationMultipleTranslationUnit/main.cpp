@@ -24,6 +24,12 @@ int main()
 
     // get underlying singleton object wrapped by Singleton for use in the current scope
     auto& mInstance = Singleton<MyManager>::GetInstance();
+    auto* mInstancePtr = &mInstance;
+
+    // the following commented block is just a prove of concept that
+    // pointer variable's address needs not to be the same across multiple translation unit
+    // it's normal variable to hold memory address, but more important thing is address it points to
+    //std::cout << "Address of pointer points to singleton = " << &mInstancePtr << std::endl;
 
     std::cout << "Address of MyManager from main.cpp = " << &mInstance << std::endl;
     ano.printAddress();
