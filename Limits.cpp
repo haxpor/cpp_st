@@ -12,12 +12,14 @@ typedef long long mylong;
 template <typename T>
 static void PrintMinMaxValue()
 {
-    T minLong = std::numeric_limits<T>::min();
-    T maxLong = std::numeric_limits<T>::max();
+    T min = std::numeric_limits<T>::min();
+    T max = std::numeric_limits<T>::max();
+    T lowest = std::numeric_limits<T>::lowest();
 
     // typeid() evaluate in run-time, thus use RTTI
-    std::cout << "Minimum value of " << typeid(T).name() << " = " << std::setw(23) << std::right << minLong << "\n"
-              << "Maximum value of " << typeid(T).name() << " = " << std::setw(23) << std::right << maxLong << std::endl;
+    std::cout << "Minimum value of " << typeid(T).name() << " = " << std::setw(23) << std::right << min << "\n"
+              << "Maximum value of " << typeid(T).name() << " = " << std::setw(23) << std::right << max << "\n"
+              << "Lowest  value of " << typeid(T).name() << " = " << std::setw(23) << std::right << lowest << std::endl;
 }
 
 int main()
