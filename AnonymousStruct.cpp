@@ -7,6 +7,12 @@
  * The benefit of anonymous struct is to be able to group the similar proximity or set of data together
  * without having to come up with a name for it (as naming variable is hard :)), also to limit the
  * scope of usage of it to be local within what wraps it which in our case here is outer union.
+ *
+ * Extra note:
+ *  - same style of using anonymous struct inside union can be seen in CryEngine code in file
+ *    CRYENGINE/Code/CryEngine/Cry3DEngine/terrain_sector.h for its SHeightMapItem union as well.
+ *  - the point here is also that we can access member fields of wrapped struct directly from the
+ *    variable name of outer union.
  */
 #include <iostream>
 
