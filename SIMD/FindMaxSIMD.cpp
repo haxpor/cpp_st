@@ -17,6 +17,7 @@
 #include <emmintrin.h>
 #include <iostream>
 #include <cassert>
+#include "ProfileCommon.h"
 
 /// - the following code taken from my krr project with slightly modified to satisfy modern c++ a bit especially not using malloc()--
 /// - link: https://github.com/abzico/krr
@@ -118,15 +119,19 @@ int main()
         exit(1);
     }
 
-    assert(reinterpret_cast<std::uintptr_t>(&nums[0]) % 16 == 0);
-    assert(reinterpret_cast<std::uintptr_t>(&nums[1]) - reinterpret_cast<std::uintptr_t>(&nums[0]) == sizeof(float));
+    // uncomment these two lines if need to validate that it allocates in aligned manner
+    //assert(reinterpret_cast<std::uintptr_t>(&nums[0]) % 16 == 0);
+    //assert(reinterpret_cast<std::uintptr_t>(&nums[1]) - reinterpret_cast<std::uintptr_t>(&nums[0]) == sizeof(float));
 
     for (int i=0; i<n; ++i)
     {
         std::cin >> nums[i];
     }
 
-    std::cout << std::fixed << findMax(nums, n) << std::endl;
+    Profile::Start();
+    float max = findMax(nums, n);
+    long int el = Profile::End();
+    std::cout << std::fixed << max << " in " << el << "ms" << std::endl;
 
     KRR_MEM_delete<float>(nums);
 

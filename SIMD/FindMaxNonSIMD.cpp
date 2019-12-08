@@ -6,6 +6,7 @@
  */
 #include <iostream>
 #include <vector>
+#include "ProfileCommon.h"
 
 int main()
 {
@@ -23,14 +24,15 @@ int main()
         std::cin >> nums[i];
     }
 
+    Profile::Start();
     float max = nums[0];
     for (int i=1; i<n; ++i)
     {
         if (max < nums[i])
             max = nums[i];
     }
+    long int el = Profile::End();
 
-    std::cout << std::fixed << max << '\n';
-    std::cout.flush();
+    std::cout << std::fixed << max << " in " << el << "ms" << std::endl;
     return 0;
 }
