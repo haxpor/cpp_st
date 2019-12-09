@@ -25,6 +25,10 @@ static void worker_thread()
 {
     std::unique_lock<std::mutex> lock(mx);
     // wait until it becomes ready
+    // the reason why conditinal_variable needs mutex lock because to prevent other thread from
+    // intervening it while it's waiting as other threads might intervene and send notify even before
+    // it can wait and do anything
+    // see: https://stackoverflow.com/a/46088977/571227
     cv.wait(lock, []() { return ready; });
 
     // after the wait, we now own the lock
