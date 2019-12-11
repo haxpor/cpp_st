@@ -15,6 +15,28 @@ static const unsigned int GREEN = MathUtil::makeColorARGB(0, 255, 0, 255);
 static const unsigned int BLUE = MathUtil::makeColorARGB(0, 0, 255, 255);
 static const unsigned int WHITE = MathUtil::makeColorARGB(255, 255, 255, 255);
 
+#if defined(NDEBUG)
+#define LOG(fmt, ...)
+#define LOGA(fmt, ...)
+#define LOGA_WHITE(fmt, ...)
+#define LOGA_RED(fmt, ...)
+#define LOGA_GREEN(fmt, ...)
+#define LOGA_BLUE(fmt, ...)
+#define LOGA_MAGENTA(fmt, ...)
+#define LOGA_CYAN(fmt, ...)
+#define LOGA_YELLOW(fmt, ...)
+#else
+#define LOG(fmt, ...) Logger::Log(fmt, ##__VA_ARGS__)
+#define LOGA(fmt, ...) Logger::LogA(fmt, ##__VA_ARGS__)
+#define LOGA_WHITE(fmt, ...)  Logger::LogA<Logger::TextColor::WHITE>(fmt, ##__VA_ARGS__)
+#define LOGA_RED(fmt, ...)  Logger::LogA<Logger::TextColor::RED>(fmt, ##__VA_ARGS__)
+#define LOGA_GREEN(fmt, ...)  Logger::LogA<Logger::TextColor::GREEN>(fmt, ##__VA_ARGS__)
+#define LOGA_BLUE(fmt, ...)  Logger::LogA<Logger::TextColor::BLUE>(fmt, ##__VA_ARGS__)
+#define LOGA_MAGENTA(fmt, ...)  Logger::LogA<Logger::TextColor::MAGENTA>(fmt, ##__VA_ARGS__)
+#define LOGA_CYAN(fmt, ...)  Logger::LogA<Logger::TextColor::CYAN>(fmt, ##__VA_ARGS__)
+#define LOGA_YELLOW(fmt, ...)  Logger::LogA<Logger::TextColor::YELLOW>(fmt, ##__VA_ARGS__)
+#endif
+
 class Logger
 {
 public:
