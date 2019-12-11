@@ -3,6 +3,7 @@
 #include "Common.h"
 
 #include <vector>
+#include <algorithm>
 
 enum class CircleColor
 {
@@ -41,31 +42,32 @@ struct SyncObj
         syncBusyLock.clear();       
     }
 
-    inline void waitForBothOnCurrentThreadAndReset()
+    inline void waitForBothOnCurrentThread()
     {
         // quickly use this to avoid printing too many lines
         static bool isPrinted = false;
         isPrinted = false;
 
-        Logger::LogA<Logger::TextColor::RED>("[sync obj] waitForBoth\n");
+        LOGA_RED("[sync obj] waitForBoth\n");
 
-        // don't use locking here with assumption that reading operation is atomic
-        // and we won't get garbage or undefined value as completed array are already initially
-        // set from start
-        while (!completed[0] || !completed[1])
+        for(;;)
         {
+            while (syncBusyLock.test_and_set())
+                ;
+
             if (!isPrinted)
             {
-                Logger::LogA<Logger::TextColor::RED>("[sync obj] after busywait in waitForBoth...\n");
+                LOGA_RED("[sync obj] busywait in waitForBoth...\n");
                 isPrinted = true;
             }
-        } 
 
-        Logger::LogA<Logger::TextColor::RED>("[sync obj] done waitForBoth\n");
+            syncBusyLock.clear();
 
-        // reset is here to avoid a need to schedule reset after setReady() every frame
-        // and to avoid involving timing which is unpredictable.
-        reset();
+            if (completed[0] && completed[1])
+                break;
+        }
+
+        LOGA_RED("[sync obj] done waitForBoth\n");
     }
 
     inline void waitForOnCurrentThread(int i)
@@ -73,15 +75,23 @@ struct SyncObj
         static bool isPrinted = false;
         isPrinted = false;
 
-        // no bound check for perf, adhere to programmer's judgement and no mistake
-        while (!completed[i])
+        for(;;)
         {
+            while (syncBusyLock.test_and_set())
+                ;
+
             if (!isPrinted)
             {
-                Logger::LogA<Logger::TextColor::RED>("[sync obj] busy waiting for %d...\n", i);
+                LOGA_RED("[sync obj] busy waiting for %d...\n", i);
                 isPrinted = true;
             }
-        } 
+
+            syncBusyLock.clear();
+
+            if (completed[i])
+                break;
+        }
+        LOGA_RED("[sync obj] done waitFor %d\n", i);
     }
 
     inline void waitReadyOnCurrentThread()
@@ -89,42 +99,53 @@ struct SyncObj
         static bool isPrinted = false;
         isPrinted = false;
 
-        while (!ready_and_reset)
+        for(;;)
         {
+            while (syncBusyLock.test_and_set())
+                ;
+
             if (!isPrinted)
             {
-                Logger::LogA<Logger::TextColor::RED>("[sync obj] busy waiting ready_and_reset...\n");
+                LOGA_RED("[sync obj] busy waiting ready...\n");
                 isPrinted = true;
             }
+
+            syncBusyLock.clear();
+
+            if (ready_and_reset)
+                break;
         }
+        LOGA_RED("[sync obj] done waiting ready\n");
     }
 
-    inline void setReady()
+    inline void setReadyAndResetAllComplete()
     {
 
-        while (syncBusyLock.test_and_set(std::memory_order_acquire))
+        while (syncBusyLock.test_and_set())
             ;
 
+        completed[0] = false;
+        completed[1] = false;
         ready_and_reset = true;
 
         syncBusyLock.clear();
-        Logger::LogA<Logger::TextColor::RED>("[sync obj] set ready_and_reset\n");
+        LOGA_RED("[sync obj] set ready (and reset complete flags)\n");
     }
 
     inline void setComplete(int i)
     {
-        while (syncBusyLock.test_and_set(std::memory_order_acquire))
+        while (syncBusyLock.test_and_set())
             ;
 
         completed[i] = true;
 
         syncBusyLock.clear();
-        Logger::LogA<Logger::TextColor::RED>("[sync obj] set complete for %d\n", i);
+        LOGA_RED("[sync obj] set complete for %d\n", i);
     }
 
     inline void reset()
     {
-        while (syncBusyLock.test_and_set(std::memory_order_acquire))
+        while (syncBusyLock.test_and_set())
             ;
 
         completed[0] = false;
@@ -132,7 +153,7 @@ struct SyncObj
         ready_and_reset = false;
 
         syncBusyLock.clear();
-        Logger::LogA<Logger::TextColor::RED>("[sync obj] reset both\n");
+        LOGA_RED("[sync obj] reset both\n");
     }
 };
 

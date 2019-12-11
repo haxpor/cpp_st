@@ -18,7 +18,7 @@
 // the actual amount associated with the command depends on GameThreadManager
 enum GameCommandType
 {
-    ROTATE_RIGHT_ALL_OBJS,
+    ROTATE_RIGHT_ALL_OBJS=0,
     ROTATE_LEFT_ALL_OBJS,
     ADD_NEW_RANDOM_CIRCLE,
     FIRST_FRAME_SPECIAL,
@@ -108,11 +108,11 @@ public:
             return;
 
         // spinlock when we add a new item into the working queue
-        Logger::LogA<Logger::TextColor::MAGENTA>("[game thread] waiting for adding a new item\n");
-        while (thQueueBusyLock.test_and_set(std::memory_order_acquire))
+        LOGA_MAGENTA("[game thread] waiting for adding a new item\n");
+        while (thQueueBusyLock.test_and_set())
             ;
         workQueue.push(gc);
-        Logger::LogA<Logger::TextColor::MAGENTA>("[game thread] added one more work into queue\n");
+        LOGA_MAGENTA("[game thread] added one more work into queue\n");
         thQueueBusyLock.clear();
     
         // notify the thread that new work item is added
@@ -129,19 +129,19 @@ protected:
         switch (gc.type)
         {
         case FIRST_FRAME_SPECIAL:
-            Logger::LogA<Logger::TextColor::MAGENTA>("[game thread] prepare game state for first frame - no sync will be needed\n");
+            LOGA_MAGENTA("[game thread] prepare game state for first frame - no sync will be needed\n");
             break;
         case ADD_NEW_RANDOM_CIRCLE:
-            Logger::LogA<Logger::TextColor::MAGENTA>("[game thread] add new circle\n");
+            LOGA_MAGENTA("[game thread] add new circle\n");
             break;
         case NEXT_TICK:
-            Logger::LogA<Logger::TextColor::MAGENTA>("[game thread] update for next frame\n");
+            LOGA_MAGENTA("[game thread] update for next frame\n");
             break;
         }
 
         // now sending the result into associated game-state of this command
         // TODO: Optimize for efficient copy from thread to game-state
-        Logger::LogA<Logger::TextColor::MAGENTA>("[game thread] copy updated game-state to target game-state id[%d]\n", gc.gs->id);
+        LOGA_MAGENTA("[game thread] copy updated game-state to target game-state id[%d]\n", gc.gs->id);
         gc.gs->circles = circles;
     }
 
@@ -149,7 +149,7 @@ private:
     void updateGameWorldThreadWorker()
     {
         do{
-            Logger::LogA<Logger::TextColor::MAGENTA>("[game thread] waiting\n");
+            LOGA_MAGENTA("[game thread] waiting\n");
             std::unique_lock<std::mutex> lock(thCheckCondMX);
             // if there is some works need to be done, or order to kill itself come
             thCV.wait(lock, [&]() { return workQueue.size() > 0 || signalKillThread; });
@@ -157,21 +157,21 @@ private:
 
             if (signalKillThread)
             {
-                Logger::LogA<Logger::TextColor::MAGENTA>("[game thread] kill itself\n"); 
+                LOGA_MAGENTA("[game thread] kill itself\n"); 
                 break;
             }
             else if (workQueue.size() > 0)
             {
                 // remove work item from the working queue
                 // use atomic_flag here as we know it won't take long time to do this
-                while (thQueueBusyLock.test_and_set(std::memory_order_acquire))
+                while (thQueueBusyLock.test_and_set())
                     ;
-                const GameCommand& gc = workQueue.front();
+                GameCommand gc = std::move(workQueue.front());
                 workQueue.pop();        // std::queue::pop (derived from std::deque) won't invalidate front and back iterator and reference
                 thQueueBusyLock.clear();
 
                 // do real work
-                Logger::LogA<Logger::TextColor::MAGENTA>("[game thread] do some work\n");
+                LOGA_MAGENTA("[game thread] do some work\n");
                 Profile::Start();
                 gamework(gc);
                 Profile::EndAndPrintA("-- [game thread]");
@@ -199,6 +199,5 @@ private:
 
     // -- section of game related variables --//
     std::vector<Circle> circles;
-    //std::weak_ptr<SyncObj> syncObj_weakPtr;
     SyncObj* syncObj;
 };

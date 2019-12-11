@@ -60,18 +60,18 @@ public:
         dedicatedTH.join();
     }
 
-    void enqueue(const GameState& gameState)
+    void enqueue(GameState* gs)
     {
         if (signalKillThread)
             return;
 
         // spinlock when we add a new item into the working queue
-        Logger::LogA<Logger::TextColor::CYAN>("[rendering thread] waiting for adding a new queue\n");
-        while (thQueueBusyLock.test_and_set(std::memory_order_acquire))
+        LOGA_CYAN("[rendering thread] waiting for adding a new queue\n");
+        while (thQueueBusyLock.test_and_set())
                 ;
-        renderingQueue.push(gameState);
+        renderingQueue.push(gs);
         thQueueBusyLock.clear();
-        Logger::LogA<Logger::TextColor::CYAN>("[rendering thread] added one more work into queue\n");
+        LOGA_CYAN("[rendering thread] added one more work into queue\n");
 
         // notify the thread
         thCV.notify_one();
@@ -97,7 +97,7 @@ private:
     void endlessReusableRenderWorker()
     {
         do{
-            Logger::LogA<Logger::TextColor::CYAN>("[rendering thread] waiting\n");
+            LOGA_CYAN("[rendering thread] waiting\n");
             std::unique_lock<std::mutex> lock(thCheckCondMX);
             // if there is some works need to be done, or order to kill itself come
             thCV.wait(lock, [&]() { return renderingQueue.size() > 0 || signalKillThread; });
@@ -105,7 +105,7 @@ private:
 
             if (signalKillThread)
             {
-                Logger::LogA<Logger::TextColor::CYAN>("[rendering thread] kill itself\n");
+                LOGA_CYAN("[rendering thread] kill itself\n");
                 break;
             }
             else if (renderingQueue.size() > 0)
@@ -115,14 +115,14 @@ private:
                 //
                 // use lock-free spinlock to quickly clear the framebuffer + zbuffer
                 // as we use std::memset, this is quickest we could get
-                while (thQueueBusyLock.test_and_set(std::memory_order_acquire))
+                while (thQueueBusyLock.test_and_set())
                     ;
-                GameState& gs = renderingQueue.front();
+                GameState* gs = renderingQueue.front();
                 renderingQueue.pop();
                 thQueueBusyLock.clear();
 
                 // do real work
-                Logger::LogA<Logger::TextColor::CYAN>("[rendering thread] render for game-state id[%d]\n", gs.id);
+                LOGA_CYAN("[rendering thread] render for game-state id[%d]\n", gs->id);
                 Profile::Start();
                 // rendering tasks don't need locking mechanism as this is a dedicated thread to
                 // handle all of the remaining rendering work
@@ -140,21 +140,21 @@ private:
         } while (!signalKillThread);
     }
 
-    void renderWork(GameState& gs)
+    void renderWork(GameState* gs)
     {
-        auto ccs = gs.circles;
+        auto ccs = gs->circles;
         const int kCircleCount = ccs.size();
 
         // sort according to z-depth value
         // we try to draw near the camera first before further to reduce overdraw
-        std::sort(gs.circles.begin(), gs.circles.end(), [](const Circle& a, const Circle& b) { return a.depth < b.depth; });
+        std::sort(gs->circles.begin(), gs->circles.end(), [](const Circle& a, const Circle& b) { return a.depth < b.depth; });
 
         for (int i=0; i<kCircleCount; ++i)
         {
             renderRectangle(ccs[i]);
         }
 
-        Logger::LogA<Logger::TextColor::CYAN>("[rendering thread] render %d circles\n", kCircleCount);
+        LOGA_CYAN("[rendering thread] render %d circles\n", kCircleCount);
     }
 
     void renderRectangle(const Circle& c)
@@ -169,8 +169,8 @@ private:
         
         const int squaredR = c.r * c.r;
 
-        Logger::LogA<Logger::TextColor::GREEN>(":%d,%d %d,%d\n", c.x, c.y, c.depth, c.r);
-        Logger::LogA<Logger::TextColor::GREEN>("%d,%d %d,%d %d\n", minX, maxX, minY, maxY, squaredR);
+        //LOGA_GREEN(":%d,%d %d,%d\n", c.x, c.y, c.depth, c.r);
+        //LOGA_GREEN("%d,%d %d,%d %d\n", minX, maxX, minY, maxY, squaredR);
 
         for (int x=minX; x<=maxX; ++x)
         {
@@ -200,7 +200,7 @@ private:
     std::vector<float> zBuffer; 
     std::vector<unsigned int> frameBuffer;  // in format ARGB
 
-    std::queue<GameState> renderingQueue;
+    std::queue<GameState*> renderingQueue;
     std::atomic_flag thQueueBusyLock;
     std::mutex thCheckCondMX;
     std::condition_variable thCV;
