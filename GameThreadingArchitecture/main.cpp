@@ -40,14 +40,17 @@ int main()
     MathUtil::init();
 
     int frameCount = 0;
-    const int kTargetFrameCount = 10;
+    const int kTargetFrameCount = 1000;
 
-    Logger::LogA<Logger::TextColor::YELLOW>("--Begin Game Initialization--\n");
+    LOGA_YELLOW("--Begin Game Initialization--\n");
 
     // we will swap between these two game states (as dataset)
     // for game-thread and rendering-thread to work on it in parallel
     GameState gs1(1, MAX_CIRCLES);
     GameState gs2(2, MAX_CIRCLES);
+
+    GameState* gs1Ptr = &gs1;
+    GameState* gs2Ptr = &gs2;
  
     SyncObj syncObj;
 
@@ -62,29 +65,30 @@ int main()
     gameThread.initialize(MAX_CIRCLES);
     gameThread.startThread();
     // initial frame, we all have ready data to enqueue
-    gameThread.enqueue(GameCommand(&gs1, GameCommandType::FIRST_FRAME_SPECIAL));
+    gameThread.enqueue(GameCommand(gs1Ptr, GameCommandType::FIRST_FRAME_SPECIAL));
 
     // wait until first frame is prepared
     syncObj.waitForOnCurrentThread(0);
 
-    Logger::LogA<Logger::TextColor::YELLOW>("--Begin Game Loop--\n");
+    LOGA_YELLOW("--Begin Game Loop--\n");
     while (frameCount < kTargetFrameCount)
     {
-        gameThread.enqueue(GameCommand(&gs2, GameCommandType::ADD_NEW_RANDOM_CIRCLE));
-        renderingThread.enqueue(gs1);
+        gameThread.enqueue(GameCommand(gs2Ptr, GameCommandType::ADD_NEW_RANDOM_CIRCLE));
+        renderingThread.enqueue(gs1Ptr);
 
         // simulate gameplay for frameCount
         ++frameCount;
 
         // sync between two threads
         // usually render thread should finish later so fps won't lack behind due to logic update
-        syncObj.waitForBothOnCurrentThreadAndReset();
-        syncObj.setReady();
+        syncObj.waitForBothOnCurrentThread();
 
-        Logger::LogA<Logger::TextColor::YELLOW>("[main thread] -------- swap --------\n");
-
+        LOGA_YELLOW("[main thread] -------- swap --------\n");
         using std::swap;    // for ADL
-        swap(gs1, gs2);
+        swap(gs1Ptr, gs2Ptr);
+
+        LOGA_YELLOW("[main thread] finished rendering frame %d\n", frameCount);
+        syncObj.setReadyAndResetAllComplete();
     }
     auto s = renderingThread.getFrameBuffer();
     // write into file from framebuffer
@@ -93,10 +97,11 @@ int main()
     renderingThread.writeToTGAImage(IMG_FILENAME);
 
     // kill and wait
-    Logger::LogA<Logger::TextColor::YELLOW>("[main thread] kill both threads\n");
+    LOGA_YELLOW("[main thread] kill both threads\n");
     gameThread.killThreadAndWait();
     renderingThread.killThreadAndWait();
 
+    // use this to always print out even in debug build
     Logger::LogA<Logger::TextColor::YELLOW>("[main thread] Wrote into .tga file\n");
 
     return 0;
