@@ -20,7 +20,7 @@ public:
 
     inline static void EndAndPrintA()
     {
-        Logger::LogA(" execution elapsed %lu ms\n", std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - gProfile_startTime).count());
+        LOGA(" execution elapsed %lu ms\n", std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - gProfile_startTime).count());
     }
 
     template <Logger::TextColor TC = Logger::TextColor::WHITE>
