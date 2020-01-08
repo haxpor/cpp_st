@@ -25,6 +25,15 @@ int main()
 
     // the following line is not possible, you cannot capture with T&
     //int& rr = std::max(a, b);
+    
+    // use of initializer list
+    int c = 50;
+    int d = 25;
+    const int& rr2 = std::max({a,b,c,d});           // this would be dangling as input is initializer list, DON't USE this in production code
+    std::cout << "-- Const Reference + Initializer List --\n";
+    std::cout << "Max: " << rr2 << '\n';
+    std::cout << "c: " << c << " address: " << std::addressof(c) << '\n'
+              << "rr2: " << rr2 << " address: " << std::addressof(rr2) <<  std::endl;
 
     std::cout.flush();
     return 0;
