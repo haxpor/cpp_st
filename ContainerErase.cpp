@@ -29,6 +29,14 @@ int main() {
         //auto range = map.equal_range(1);
         //map.erase(range.first, range.second);
         //assert(map.size() == 2);
+
+        // This is a correct use of erase() towards all elements with target key of 2
+        std::unordered_multimap<int, int> map {{1,1}, {1,2}, {2,1}, {1,3}, {2,2}};
+        map.erase(1);
+        assert(map.size() == 2);
+        for (auto it=map.begin(); it!=map.end(); ++it) {
+            assert(it->first == 2);
+        }
     }
     return 0;
 }
