@@ -22,6 +22,8 @@ public:
 private:
     MySingleton() { }
     ~MySingleton() { }
+    MySingleton& operator=(const MySingleton&) = delete;
+    MySingleton& operator=(MySingleton&&) = delete;
 };
 
 int main() {
