@@ -10,10 +10,13 @@
  * But with `make` to utilize `static` solution to prevent this error.
  */
 #ifdef PROBLEM
-void mess_proof()
+void mess_proof();
 #else
-static void mess_proof()
+static void mess_proof();
 #endif
+
+/** no need for repetitively specify `static` here again **/
+void mess_proof()
 {
     std::cout << "Original not tampered!\n";
 }
