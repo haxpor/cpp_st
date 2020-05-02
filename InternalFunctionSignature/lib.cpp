@@ -15,8 +15,8 @@ void mess_proof();
 static void mess_proof();
 #endif
 
-/** no need for repetitively specify `static` here again **/
-void mess_proof()
+/** no need for repetitively specify `static` here again, but defined here explicitly. **/
+static void mess_proof()
 {
     std::cout << "Original not tampered!\n";
 }
