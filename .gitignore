@@ -3,3 +3,5 @@
 *.swo
 *.so
 *.o
+*.obj
+*.exe
