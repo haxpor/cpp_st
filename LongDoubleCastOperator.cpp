@@ -1,3 +1,4 @@
+// check assembly output compiling with MSVC at https://gist.github.com/haxpor/19b0236a07a525999721e3ec3432af1b
 #include <initializer_list>
 #include <iostream>
 
@@ -10,12 +11,6 @@ struct Widget
     {
         std::cout << "cast operator float() called" << std::endl;
         return 2.0f;
-    }
-
-    operator long double() const
-    {
-        std::cout << "cast operator long double() called" << std::endl;
-        return 2.0;
     }
 
     // uncomment to have direct cast operator available to be called by w2 (below)
