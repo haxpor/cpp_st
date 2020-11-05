@@ -13,11 +13,10 @@
 #include <iostream>
 #include <cassert>
 
-template <int START, int LENGTH>
-void printSubString(std::string_view sv)
+void printSubString(std::string_view sv, int start, int length)
 {
-    assert(START + LENGTH <= sv.length() && "Length of string is not long enough");
-    std::cout << sv.substr(START, LENGTH) << std::endl;
+    assert(start + length <= sv.length() && "Length of string is not long enough");
+    std::cout << sv.substr(start, length) << std::endl;
 }
 
 int main()
@@ -29,6 +28,6 @@ int main()
     std::cout << myStringView << '\n';
 
     std::cout << myStringView.substr(0,5) << '\n';
-    printSubString<0,2>(std::string_view(myString));
+    printSubString(std::string_view(myString), 0, 2);
     return 0;
 }
