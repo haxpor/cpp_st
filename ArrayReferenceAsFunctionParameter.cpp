@@ -36,7 +36,7 @@ int main()
 {
 	int src_array[] = {1, 2, 3, 4, 5};
 	const int sum1 = sumArray(src_array);
-	const int sum2 = sumArray2(src_array);
+	const int sum2 = sumArray2(src_array);		// function template instance knows ARRAY_SIZE at the time calling it at this point
 	assert(sum1 == sum2 && "Both summation must be equal");
 	return 0;
 }
