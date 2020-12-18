@@ -29,6 +29,10 @@ namespace Detail
 
 class Widget
 {
+	// not possible as using at class scope can only be used
+	// for member data, not arbitrary names
+	//using Detail::AnotherLevel::Util;
+
 public:
 	void begin()
 	{
