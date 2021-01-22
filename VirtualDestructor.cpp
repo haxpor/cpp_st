@@ -15,13 +15,13 @@ public:
 class Derived1 : public Base
 {
 public:
-	~Derived1() { std::cout << "~Derived()1\n"; }
+	~Derived1() { std::cout << "~Derived1()\n"; }
 };
 
 class Derived2 : public Derived1
 {
 public:
-	~Derived2() { std::cout << "~Derived()2\n"; }
+	~Derived2() { std::cout << "~Derived2()\n"; }
 };
 
 int main()
