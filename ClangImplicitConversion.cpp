@@ -6,9 +6,11 @@
  *
  * Compile it with
  *
- * clang++ -std=c++17 -Wall -Wextra ClangImplicitConversion.cpp
+ * "clang++ -std=c++17 -Wall -Wextra ClangImplicitConversion.cpp"
  *
- * although -Wall -Wextra might not be necessary.
+ * although -Wall -Wextra might not be necessary, and we can force it to proceed on with it with -Wno-non-pod-varargs but that will crash (core dumped) finally so not much help.
+ *
+ * But this won't shout out any error message on GCC, or MSVC.
  */
 #include <iostream>
 #include <cstdarg>
