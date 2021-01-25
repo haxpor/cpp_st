@@ -3,6 +3,12 @@
  * into variadic function especially with clang which will shout out error of
  *
  * "error: cannot pass object of non-trivial type .... (aka '....) through variadic function; call will abort at runtime [-Wnon-pod-varargs]
+ *
+ * Compile it with
+ *
+ * clang++ -std=c++17 -Wall -Wextra ClangImplicitConversion.cpp
+ *
+ * although -Wall -Wextra might not be necessary.
  */
 #include <iostream>
 #include <cstdarg>
