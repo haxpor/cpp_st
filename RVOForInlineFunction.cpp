@@ -20,8 +20,22 @@ constexpr std::uintptr_t AddressInNumeric(const T& t)
 	return reinterpret_cast<std::uintptr_t>(std::addressof(t));
 }
 
+template <std::size_t SIZE>
+constexpr std::uintptr_t AddressInNumericOfArray(const char (&a)[SIZE])
+{
+	return reinterpret_cast<std::uintptr_t>(std::addressof(a));
+}
+
 struct Widget
 {
+#ifdef _MSC_VER
+	// these three lines are for verbose logging for behavior
+	// but for GCC we didn't need it for RVO to work properly
+	Widget() {}
+	Widget(const Widget&) { std::cout << "copying...\n"; }
+	~Widget() { std::cout << "destructing...\n"; }
+#endif
+
 	char buffer[256];
 };
 
@@ -51,6 +65,6 @@ int main()
 	// validate if the RVO kicks into play
 	assert(AddressInNumeric(myWidget) == g_localAddress);
 	// validate its buffer address if the RVO kicks into play
-	assert(AddressInNumeric(myWidget.buffer) == g_localBufferAddress);
+	assert(AddressInNumericOfArray(myWidget.buffer) == g_localBufferAddress);
 	return 0;
 }
