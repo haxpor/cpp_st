@@ -11,11 +11,13 @@
  * although -Wall -Wextra might not be necessary, and we can force it to proceed on with it with -Wno-non-pod-varargs but that will crash (core dumped) finally so not much help.
  *
  * But this won't shout out any error message on GCC, or MSVC.
+ * Unless turn on warning for GCC with -Wconditionally-supported.
  */
-#include <iostream>
 #include <cstdarg>
 #include <cstring>
+#include <string>
 #include <cstdio>
+#include <type_traits>
 
 // variadic function which usually trigger an issue that clang cannot implicitly convert
 // type T to const char* even we've defined casting operator.
@@ -26,6 +28,14 @@ static void FreeLog(const char* format, ...)
 	std::vprintf(format, arglist);
 	va_end(arglist);	
 }
+
+struct Pod
+{
+	double foo;
+	const char* bar;
+
+	operator const char*() const { return bar; }
+};
 
 template<class T, size_t SIZE>
 struct MyStringWrapper
@@ -46,7 +56,7 @@ public:
 	//
 	// It has no requirement to also have non-trivial constructor
 	//
-	// Uncomment this destructor lines to pass the compiler's error.
+	// TODO: Comment this destructor lines to pass the compiler's error.
 	~MyStringWrapper()
 	{
 	}
@@ -66,10 +76,20 @@ typedef MyStringWrapper<char, 512> MyString;
 
 int main()
 {
-	MyString myStr("hello world");
-	// this line is totally fine
-	std::cout << "String: " << myStr << std::endl;
+	// 1: this line is totally fine
+	FreeLog("1: %f %s\n", 10.0, "Helloworld");
 
-	FreeLog("String: %s\n", myStr);
+	// 2: trivial object (or per se POD)
+	static_assert(std::is_trivial<Pod>::value, "Pod structure must be trivial type");
+	Pod st { 10.0, "Bar text" };
+	FreeLog("2: %f %s\n", st.foo, st);
+
+	// 3: non-trivial object
+	// now it would be a problem for clang. For  GCC/MSVC would be the case, if we turn on such warning as well.
+	static_assert(!std::is_trivial<MyString>::value, "MyString must be non-trivial type");
+	MyString myStr("Hello world");
+	// TODO: comment this line to be able to pass the compilation
+	FreeLog("3: %s\n", myStr);
+
 	return 0;
 }
