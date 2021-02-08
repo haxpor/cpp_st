@@ -87,6 +87,8 @@ int main()
 	// 3: non-trivial object
 	// now it would be a problem for clang. For  GCC/MSVC would be the case, if we turn on such warning as well.
 	static_assert(!std::is_trivial<MyString>::value, "MyString must be non-trivial type");
+	// this check is not necessary as trivially-copyable at least requires type to be trivial type, but no harm to add
+	static_assert(!std::is_trivially_copyable<MyString>::value, "MyString must be non-trivially-copyable type");
 	MyString myStr("Hello world");
 	// TODO: comment this line to be able to pass the compilation
 	FreeLog("3: %s\n", myStr);
