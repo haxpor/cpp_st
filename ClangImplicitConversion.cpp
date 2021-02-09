@@ -90,7 +90,7 @@ int main()
 	// this check is not necessary as trivially-copyable at least requires type to be trivial type, but no harm to add
 	static_assert(!std::is_trivially_copyable<MyString>::value, "MyString must be non-trivially-copyable type");
 	MyString myStr("Hello world");
-	// TODO: comment this line to be able to pass the compilation
+	// TODO: comment this line to be able to pass the compilation on clang
 	FreeLog("3: %s\n", myStr);
 
 	return 0;
