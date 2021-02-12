@@ -1,6 +1,6 @@
 /**
  * Prove-of-concept that static local variable to function scope has only one instance
- * for the class.
+ * for the class although we've created multiple objects from the same class.
  */
 #include <iostream>
 #include <memory>
