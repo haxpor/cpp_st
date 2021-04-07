@@ -24,6 +24,10 @@
  * Called Authorizer::Authorize()
  * Authorize from normal flow via Cert
  * Called Authorizer::Authorize()
+ *
+ * Note further, for implementation used in the book, that's for older compiler which might not
+ * restrict to use locally declared type instead of external one. But for us at least for gcc 9.x,
+ * it will try to use externally declared type rather than locally declared one.
  */
 
 #include "Authorizer.h"
