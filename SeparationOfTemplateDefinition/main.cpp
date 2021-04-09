@@ -8,6 +8,12 @@
  *
  * Thus to solve such issue, we can explicitly instantiate template class ourselves (see TemplateLit.cpp).
  * This allows us to separate template's declaration and definition.
+ *
+ * Extra note:
+ * 'extern template' is another approach introduced in C++11 but its main goal
+ * is to reduce the compilation time as it reduces redandant template compilation,
+ * it's just like e.g. 'extern int' as there is just one definition of it.
+ * Still we have to explicitly instantiate the template class like we did in TemplateLib.cpp.
  */
 #include "TemplateLib.h"
 
