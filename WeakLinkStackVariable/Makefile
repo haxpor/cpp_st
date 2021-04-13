@@ -8,7 +8,8 @@ COMMON_HEADER_FILES = WeakSymbol.h
 
 all: a.out
 
-a.out: Lib1.o Lib2.o main.o
+# Order of dependent object files here is important to dictate which definition symbol compiler will use
+a.out: Lib1.o Lib2.o main.o 
 	$(COMPILER) $(CXXFLAGS) $^ -o $@
 
 Lib1.o: Lib1.cpp Lib1.h $(COMMON_HEADER_FILES)
