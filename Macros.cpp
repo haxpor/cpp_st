@@ -31,6 +31,8 @@ struct Widget
 // string argument
 #define DECLARE_VAR(moduleName, name, val) int g_##moduleName##_##name = val
 
+#define KERN_INDICATOR "Something"
+
 int main()
 {
 	assert(std::strcmp(M1(Hello, World), "Hello") == 0);
@@ -46,6 +48,8 @@ int main()
 
 	DECLARE_VAR(TestModuleName, myTest, 2);
 	assert(g_TestModuleName_myTest == 2);
+
+	assert(std::strcmp(KERN_INDICATOR " concatenates with STR", "Something concatenates with STR") == 0);
 
 	return 0;
 }
