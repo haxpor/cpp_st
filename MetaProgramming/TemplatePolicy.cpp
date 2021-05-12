@@ -66,6 +66,8 @@ struct ObjectIntCreator
 {
 	using backing_type = BACKING_TYPE;
 
+	// NOTE: I always want to enable it via a type template parameter (which in my opinion the cleanest way, way no.5 as seen in https://en.cppreference.com/w/cpp/types/enable_if)
+	// but it mostly will fail, so I tend to choose other ways like this; via returning type
 	static typename std::enable_if_t<std::is_constructible_v<T, int>, T>
 	CreateObject(backing_type v)
 	{
