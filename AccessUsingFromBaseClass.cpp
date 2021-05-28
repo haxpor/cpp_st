@@ -2,7 +2,10 @@
  * To prove that we can access base class's 'using' without a need
  * to fully qualify the name.
  *
- * Constrast this with data member, or function member in which we need to fully
+ * std::__allocator_traits_base in which std::allocator_traits derives from
+ * makes use of this approach.
+ *
+ * (optional) Constrast this with data member, or function member in which we need to fully
  * qualify the class name.
  */
 
