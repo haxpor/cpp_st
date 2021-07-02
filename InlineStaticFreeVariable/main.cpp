@@ -1,5 +1,6 @@
 /**
- * Prove of concept for internal linkage variable as for each shared library
+ * Prove of concept for internal linkage variable as for each shared library (a
+ * single translation unit to build a shared library)
  * to have its own variable. Thus such list is not shared for all shared library.
  *
  * Look into libcommon.(h/cpp).
