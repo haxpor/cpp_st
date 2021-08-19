@@ -5,3 +5,7 @@
 *.o
 *.obj
 *.exe
+*.dll
+*.so
+*.lib
+*.exp
