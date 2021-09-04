@@ -24,5 +24,6 @@ int main()
 	assert(str1 == "string 2");
 	// as str1 and str2 is different object
 	assert(std::addressof(str1) != std::addressof(str2));	
+	assert(std::addressof(*str1.data()) != std::addressof(*str2.data()));
 	return 0;
 }
