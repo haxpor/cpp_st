@@ -55,6 +55,12 @@ struct DeleterGetter
 		static DerivedCustomDeleter s_deleter;
 		return &s_deleter;
 	}
+
+	static DerivedCustomDeleter* GetTrueDerivedDeleter()
+	{
+		static DerivedCustomDeleter s_deleter;
+		return &s_deleter;
+	}
 };
 
 int main()
@@ -76,6 +82,12 @@ int main()
 	// see https://stackoverflow.com/a/962148/571227
 	{
 		auto ptr = std::shared_ptr<Widget>(new Widget(1), *DeleterGetter::GetDerivedDeleter());
+	}
+
+	// this will call the derived class as GetTrueDerivedDeleter() return the
+	// actual type we aim for virtual function to be called in.
+	{
+		auto ptr = std::shared_ptr<Widget>(new Widget(1), *DeleterGetter::GetTrueDerivedDeleter());
 	}
 	return 0;
 }
