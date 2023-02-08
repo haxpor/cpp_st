@@ -1,3 +1,10 @@
+/**
+ * Validate that "using" needs definition to be existing at the time of
+ * declaration as well. But we can forward declare it.
+ *
+ * This would help in separate header file out and in architecturing our
+ * classes/files structure.
+ */
 #include "Hdr.h"
 #include "MyAnotherType.h"
 #include <iostream>
