@@ -1,3 +1,9 @@
+# Example source files over Godbolt.org
+
+Changed the way of updating examples by using godbolt.org, and keeping track of them into [godbolt_list.md](https://github.com/haxpor/cpp_st/blob/master/godbolt_list.md).
+
+# Example source files
+
 Most of the source files are compiled with (unless noted inside the source file)
 
 `g++ -std=c++17 -Wall -Wextra -pedantic <source-file1> <source-file2> ...`
