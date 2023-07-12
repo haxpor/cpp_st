@@ -2,4 +2,5 @@
 
 * https://godbolt.org/z/8hh7a633v - nested pointer of the parent class that is allocated on the heap won't be deallocated automatically if `delete` the parent object only, we need to `delete` each individual of the class's data member as well
 * https://godbolt.org/z/eKMvfqP7v - compare passing a pointer by value and by reference 
-* https://godbolt.org/z/eaozssao5 - double pointer memory deletion handling
+* https://godbolt.org/z/eaozssao5 - double pointer memory deletion handling (no leak, checked with valgrind on Linux)
+* https://godbolt.org/z/rEahKqGsf - double pointer memory deletion handling with the main pointer array is as of opaque pointer type (no leak, checked with valgrind on Linux)
