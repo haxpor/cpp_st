@@ -4,3 +4,4 @@
 * https://godbolt.org/z/eKMvfqP7v - compare passing a pointer by value and by reference 
 * https://godbolt.org/z/eaozssao5 - double pointer memory deletion handling (no leak, checked with valgrind on Linux)
 * https://godbolt.org/z/rEahKqGsf - double pointer memory deletion handling with the main pointer array is as of opaque pointer type (no leak, checked with valgrind on Linux)
+* https://godbolt.org/z/bbErcGsGG - validate that ::operator new is just a global scope function that we can call (included store address of function into std::function, and demonstrate the use of allocate memory, and deallocate memory using ::operator new/delete, and placement new)
