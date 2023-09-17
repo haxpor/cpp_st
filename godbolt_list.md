@@ -6,3 +6,4 @@
 * https://godbolt.org/z/rEahKqGsf - double pointer memory deletion handling with the main pointer array is as of opaque pointer type (no leak, checked with valgrind on Linux)
 * https://godbolt.org/z/bbErcGsGG - validate that ::operator new is just a global scope function that we can call (included store address of function into std::function, and demonstrate the use of allocate memory, and deallocate memory using ::operator new/delete, and placement new)
 * https://godbolt.org/z/zfEezvrK1 - share common code in implementing output operator for a custom type without having to duplicate implementation for both ASCII string, and wide-string character
+* https://godbolt.org/z/39ETTT331 - making destructor method as private has implications that we cannot explicitly delete the pointer, and it cannot automatically destroy itself after it goes out of scope
