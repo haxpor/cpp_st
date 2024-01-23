@@ -47,10 +47,10 @@ struct MyCallable
 
 int main()
 {
-	std::thread t1(std::move(MyCallable()), "t1");
-	std::thread t2(std::move(MyCallable()), "t2");
-	std::thread t3(std::move(MyCallable(10)), "t3");
-	std::thread t4(std::move(MyCallable(10)), "t4");
+	std::thread t1(MyCallable(), "t1");
+	std::thread t2(MyCallable(), "t2");
+	std::thread t3(MyCallable(10), "t3");
+	std::thread t4(MyCallable(10), "t4");
 
 	t1.join();
 	t2.join();
