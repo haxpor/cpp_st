@@ -5,6 +5,10 @@
  * This should be fine if you know ahead that there would be
  * a very brief time waiting, so it won't busy spin too hard.
  *
+ * This uses C++17 because of utilization of fold-expression
+ * in C++17 in ts_print() function. It would need more effort
+ * if implement in older version of C++ standard.
+ *
  * Compile with
  * g++ -std=c++17 <source-file> -lpthread
  */
