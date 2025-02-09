@@ -28,22 +28,30 @@ namespace mylib
 
     // acts as if it's a direct member of its parent namespace
     // this should be the most recent version allowing public to use
-    inline namespace v2
+    namespace v2
     {
         void foo()
         {
             std::cout << "v2 foo" << std::endl;            
         }
     }
+
+	inline namespace v3
+	{
+		void foo()
+		{
+			std::cout << "v3 foo" << std::endl;
+		}
+	}
 }
 
 int main()
 {
 	// this would call the latest implementation
     mylib::foo();
-	// same but via fully quaflified specification
+	// same but via fully quaflified specification, this will call v2 impl
     mylib::v2::foo();
-	// this would call the older implementation
+	// this would call the older implementation, this will call v1 impl
     mylib::v1::foo();
 
     return 0;
