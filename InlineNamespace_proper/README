@@ -1,0 +1,3 @@
+A proper example of inline namespace in symbol versioning control.
+
+The major controlling factor is definition of V2 to be defined at compile time for decision to use which version of implementation of foo().
